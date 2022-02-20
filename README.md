@@ -39,6 +39,6 @@ Using Jenkins Pipeline to connect btw Our Repo to deployment in AWS
 
 
 ### Contributors:
-|![Gerges Nagy](https://github.com/GergesNagy/DevOps_ITI_Project/blob/main/images/WhatsApp%20Image%202021-12-03%20at%2012.58.30%20PM.jpeg)|![Mosaab Ragab](images/1637527753861.jpeg)|![Tark Omar](images/1637527753861.jpeg)|
+|![Gerges Nagy](https://github.com/GergesNagy/DevOps_ITI_Project/blob/main/images/WhatsApp%20Image%202021-12-03%20at%2012.58.30%20PM.jpeg)|![Mosaab Ragab](https://github.com/GergesNagy/DevOps_ITI_Project/blob/main/images/WhatsApp%20Image%202022-02-20%20at%2010.34.07%20PM.jpeg)|![Tark Omar](https://github.com/GergesNagy/DevOps_ITI_Project/blob/main/images/WhatsApp%20Image%202022-02-20%20at%2011.01.48%20PM.jpeg)|
 |:-----------------:|:-----------------:|
 |[Gerges Nagy](https://github.com/GergesNagy/DevOps_ITI_Project)|[Tarek Omar]()|[Mossab Ragab](https://github.com/Mosaabmr)|
