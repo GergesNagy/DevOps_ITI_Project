@@ -2,6 +2,10 @@ variable "public1_subnet_id" {
     
 }
 
+variable "public2_subnet_id" {
+    
+}
+
 variable "private1_subnet_id" {
     
 }

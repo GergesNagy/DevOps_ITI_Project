@@ -1,0 +1,144 @@
+---
+- name: create namespace for jenkins
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: jenkins
+        
+- name: create namespace for deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: production
+        
+- name: create deploy for master jenkins
+  k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        namespace: jenkins
+        name: jenkins
+        creationTimestamp: null
+        labels:
+          app: jenkins
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: jenkins
+        strategy: {}
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app: jenkins
+          spec:
+            containers:
+            - image: jenkins/jenkins:latest
+              name: jenkins
+              resources: {}
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+                - containerPort: 50000
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 5
+                httpGet:
+                  path: /login
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 2
+                timeoutSeconds: 5
+              volumeMounts:
+                - mountPath: /var/jenkins_home
+                  name: jenkins-home
+            volumes:
+            - name: jenkins-home
+              hostPath :
+                 path: ~/jenkins
+      status: {}
+      
+- name: create loadblancer for jenkins
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        namespace: jenkins
+        name: jenkins-loadblancer
+      spec:
+        selector:
+          app: jenkins
+        ports:
+          - port: 8080
+            targetPort: 8080
+        type: LoadBalancer
+        
+- name: create jenkins-agent
+  k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        namespace: jenkins
+        name: jenkins-agent
+        labels:
+          app: jenkins-agent
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: jenkins-agent
+        template:
+          metadata:
+            labels:
+              app: jenkins-agent
+          spec:
+            containers:
+            - name: jenkins-agent
+              image: gergesnagy/jenkins_slave:1
+              ports:
+              - containerPort: 22
+              volumeMounts:
+                - mountPath: /var/run/docker.sock 
+                  name: jenkins-home
+            volumes:
+            - name: jenkins-home
+              hostPath :
+                 path: /var/run/docker.sock
+                 
+- name: create service jenkins-agent
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        namespace: jenkins
+        name: jenkins-agent-svc
+        creationTimestamp: null
+        labels:
+          app: jenkins
+      spec:
+        ports:
+        - name: jenkins-agent-svc
+          port: 22
+          protocol: TCP
+          targetPort: 22
+        selector:
+          app: jenkins-agent
+        type: ClusterIP
+      status:
+        loadBalancer: {}

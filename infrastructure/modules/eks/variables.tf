@@ -7,3 +7,7 @@ variable "private1_subnet_id" {}
 variable "private2_subnet_id" {}
 
 variable "key_name" {}
+
+variable "public1_subnet_id" {}
+
+variable "public2_subnet_id" {}

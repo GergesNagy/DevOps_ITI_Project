@@ -21,6 +21,11 @@ variable "cidr_block_public_sub1" {
     default = "10.0.3.0/24"
 }
 
+variable "cidr_block_public_sub2" {
+    type = string
+    default = "10.0.4.0/24"
+}
+
 variable "new_vpc_id" {
     
 }
