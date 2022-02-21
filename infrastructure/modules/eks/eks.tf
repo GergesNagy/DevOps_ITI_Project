@@ -41,20 +41,6 @@ resource "aws_security_group" "eks-cluster" {
 # Ingress allows Inbound traffic to EKS cluster from the  Internet 
 
   ingress {                  # Inbound Rule
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.public1_subnet_cidr]
-  }
-
-  ingress {                  # Inbound Rule
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.public1_subnet_cidr]
-  }
-
-  ingress {                  # Inbound Rule
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -75,13 +61,13 @@ resource "aws_eks_cluster" "eks_cluster" {
   vpc_config { # Configure EKS with vpc and network settings 
    security_group_ids = ["${aws_security_group.eks-cluster.id}"]
    subnet_ids         = [var.private1_subnet_id,var.private2_subnet_id,var.public2_subnet_id,var.public1_subnet_id]
-   #endpoint_private_access = true
-   endpoint_public_access = true
+   endpoint_private_access = true
+   endpoint_public_access = fales
     }
 
   depends_on = [
     aws_iam_role_policy_attachment.eks-cluster-AmazonEKSClusterPolicy,
-    #aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy,
+    aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy,
    ]
 }
 
